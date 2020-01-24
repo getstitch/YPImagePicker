@@ -169,7 +169,9 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         } else if let cameraVC = vc as? YPCameraVC {
             cameraVC.start()
         } else if let videoVC = vc as? YPVideoCaptureVC {
-            videoVC.start()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                videoVC.start()
+            }
         }
     
         updateUI()
