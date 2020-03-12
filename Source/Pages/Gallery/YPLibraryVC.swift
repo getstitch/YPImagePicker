@@ -509,8 +509,10 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                 loadAssets(index: index, selectedAssets: selectedAssets, resultMediaItems: resultMediaItems, multipleItemsCallback: multipleItemsCallback)
             }
         } else {
-            multipleItemsCallback(resultMediaItems)
-            delegate?.libraryViewFinishedLoading()
+            DispatchQueue.main.async {
+                multipleItemsCallback(resultMediaItems)
+                self.delegate?.libraryViewFinishedLoading()
+            }
         }
     }
     
