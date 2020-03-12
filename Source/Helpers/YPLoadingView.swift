@@ -49,4 +49,9 @@ class YPLoadingView: UIView {
             alpha = 0
         }
     }
+    
+    func startSpinner() {
+        spinner.startAnimating()
+        alpha = 1
+    }
 }

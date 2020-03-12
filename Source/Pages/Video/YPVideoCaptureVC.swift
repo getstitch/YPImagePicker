@@ -6,12 +6,14 @@
 //  Copyright © 2016 Yummypets. All rights reserved.
 //
 
+import Stevia
 import UIKit
 
 public class YPVideoCaptureVC: UIViewController, YPPermissionCheckable {
     
     public var didCaptureVideo: ((URL) -> Void)?
     
+    private let loadingView = YPLoadingView()
     private let videoHelper = YPVideoCaptureHelper()
     private let v = YPCameraView(overlayView: nil)
     private var viewState = ViewState()
@@ -52,6 +54,10 @@ public class YPVideoCaptureVC: UIViewController, YPPermissionCheckable {
         // Zoom
         let pinchRecongizer = UIPinchGestureRecognizer(target: self, action: #selector(self.pinch(_:)))
         v.previewViewContainer.addGestureRecognizer(pinchRecongizer)
+        
+        setupLoadingView()
+        loadingView.spinner.stopAnimating()
+        loadingView.processingLabel.text = "Processing..."
     }
 
     func start() {
@@ -81,6 +87,14 @@ public class YPVideoCaptureVC: UIViewController, YPPermissionCheckable {
     
     // MARK: - Setup
     
+    private func setupLoadingView() {
+        view.sv(
+            loadingView
+        )
+        loadingView.fillContainer()
+        loadingView.alpha = 0
+    }
+
     private func setupButtons() {
         v.flashButton.setImage(YPConfig.icons.flashOffIcon, for: .normal)
         v.flipButton.setImage(YPConfig.icons.loopIcon, for: .normal)
@@ -141,6 +155,9 @@ public class YPVideoCaptureVC: UIViewController, YPPermissionCheckable {
     }
     
     private func stopRecording() {
+
+        loadingView.startSpinner()
+        
         videoHelper.stopRecording()
         updateState {
             $0.isRecording = false
