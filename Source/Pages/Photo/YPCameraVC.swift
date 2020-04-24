@@ -150,7 +150,9 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
 
             // Flip image if taken form the front camera.
             if let device = self.photoCapture.device, device.position == .front {
-                image = self.flipImage(image: image)
+                if let cgImage = image.cgImage {
+                    image = UIImage(cgImage: cgImage, scale: UIScreen.main.scale, orientation: .leftMirrored)
+                }
             }
             
             DispatchQueue.main.async {
